@@ -1,0 +1,258 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <script src="https://kit.fontawesome.com/a14ae32021.js" crossorigin="anonymous"></script>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>For my Gwennie</title>
+
+  <style type="text/css">
+    @font-face {
+      font-family: digit;
+      src: url('digital-7_mono.ttf') format("truetype");
+    }
+  </style>
+
+  <link href="css/default.css" type="text/css" rel="stylesheet">
+  <script type="text/javascript" src="js/jquery.js"></script>
+  <script type="text/javascript" src="js/garden.js"></script>
+  <script type="text/javascript" src="js/functions.js"></script>
+</head>
+
+<body>
+  <div id="mainDiv">
+    <div id="content">
+      <div id="code">
+        <span class="comments">/**</span><br />
+        <span class="space"/><span class="comments">*For my Gwennie</span><br />
+        <span class="space"/><span class="comments">*/</span><br />
+        Hi Baby !<br />
+        It's your special day today!<br />
+        <span class="comments">// Ga berasa ya udah ulang tahun kedua kamu di Jerman</span><br />
+        It has been a long way since you came to Germany<br />
+        You've been through hard times;<br />
+        I am very proud that you have overcome them;<br />
+        And I am grateful to be by your side;<br />
+        Life always has its ups and downs;<br />
+        but I want to always be by your side through all of them;<br />
+        Let's face them together! Okay?<br />
+        <span class="comments">// Thank you for always loving me dan terima aku apa adanya</span><br />
+        I am the luckiest person in the world to have you!<br />
+        <br>
+        All I want to say is:<br />
+        I love you so much, Gwennie;<br />
+        <br>
+        Now If you want to hug me you can touch the heart below<br />
+        <br>
+        <span id="heartspan">
+          <i class="fas fa-heart" id="icon"></i>
+        </span>
+      </div>
+
+      <div id="loveHeart">
+        <canvas id="garden"></canvas>
+        <div id="words">
+          <div id="messages">
+            Together Forever
+            <div id="elapseClock"></div>
+          </div>
+          <div id="loveu">
+            I LOVE YOU!<br/>
+            <div class="signature">- Verrell</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 💌 Floating photo frame -->
+  <div id="photo-frame" class="hidden">
+    <div class="photo-content">
+      <img src="image.jpg" alt="Our Photo">
+    </div>
+  </div>
+
+  <!-- 🌸 Background Music -->
+  <audio id="bg-music" loop>
+    <source src="audio.mp3" type="audio/mpeg">
+  </audio>
+
+  <!-- 🎵 Cute Play Button -->
+  <div id="music-control">
+    <i class="fas fa-music"></i>
+  </div>
+
+  <script>
+    // 🎵 Background Music
+    const music = document.getElementById("bg-music");
+    const control = document.getElementById("music-control");
+    music.volume = 0.3;
+
+    window.addEventListener("load", async () => {
+      try {
+        await music.play();
+        setTimeout(() => music.muted = false, 1000);
+        control.classList.add("playing");
+      } catch (err) {
+        console.log("Autoplay diblokir; akan mulai setelah klik pertama.");
+      }
+    });
+
+    control.addEventListener("click", () => {
+      if (music.paused) {
+        music.play();
+        control.classList.add("playing");
+      } else {
+        music.pause();
+        control.classList.remove("playing");
+      }
+    });
+
+	// 💞 Wait until typewriter effect finishes, then enable heart click
+	window.addEventListener("load", () => {
+	// Coba pasang listener setelah sedikit delay biar typewriter selesai
+	setTimeout(() => {
+		const heart = document.getElementById("icon");
+		const photoFrame = document.getElementById("photo-frame");
+
+		if (!heart || !photoFrame) {
+		console.warn("❤️ Element belum muncul di DOM, gak bisa attach listener.");
+		return;
+		}
+
+		console.log("❤️ Heart ready:", !!heart, " Frame ready:", !!photoFrame);
+
+		heart.addEventListener("click", () => {
+		console.log("❤️ clicked!");
+		photoFrame.classList.remove("hidden");
+		setTimeout(() => photoFrame.classList.add("active"), 10);
+		});
+
+		photoFrame.addEventListener("click", (e) => {
+		if (e.target === photoFrame) {
+			photoFrame.classList.remove("active");
+			setTimeout(() => photoFrame.classList.add("hidden"), 500);
+		}
+		});
+	}, 66000); // ⏱️ delay 7 detik (selesai bersamaan dengan typewriter animasi)
+	});
+  </script>
+
+  <script type="text/javascript">
+    var offsetX = $("#loveHeart").width() / 2;
+    var offsetY = $("#loveHeart").height() / 2 - 55;
+    var together = new Date();
+    together.setFullYear(2024, 8, 18);
+    together.setHours(13);
+    together.setMinutes(30);
+    together.setSeconds(0);
+    together.setMilliseconds(0);
+
+    if (!document.createElement('canvas').getContext) {
+      var msg = document.createElement("div");
+      msg.id = "errorMsg";
+      msg.innerHTML = "Your browser doesn't support HTML5!<br/>Recommend use Chrome 14+/IE 9+/Firefox 7+/Safari 4+";
+      document.body.appendChild(msg);
+      $("#code").css("display", "none");
+      document.execCommand("stop");
+    } else {
+      setTimeout(function () { startHeartAnimation(); }, 5000);
+      timeElapse(together);
+      setInterval(function () { timeElapse(together); }, 500);
+      adjustCodePosition();
+      $("#code").typewriter();
+    }
+  </script>
+  <!-- 🎉 Cute Interactive Buttons -->
+<div id="fun-buttons">
+  <button id="confetti-btn">🎊 Confetti Party</button>
+  <button id="balloon-btn">🎈 Balloons!</button>
+  <button id="cake-btn">🎂 Surprise Cake!</button>
+</div>
+
+<script>
+// 🎊 CONFETTI EFFECT
+function launchConfetti() {
+  const duration = 3 * 1000;
+  const end = Date.now() + duration;
+
+  (function frame() {
+    // gunakan confetti bawaan browser (Canvas)
+    const colors = ['#ff69b4', '#ffb6c1', '#ffd1dc', '#fff'];
+    confetti({
+      particleCount: 5,
+      angle: 60,
+      spread: 55,
+      origin: { x: 0 },
+      colors: colors
+    });
+    confetti({
+      particleCount: 5,
+      angle: 120,
+      spread: 55,
+      origin: { x: 1 },
+      colors: colors
+    });
+    if (Date.now() < end) {
+      requestAnimationFrame(frame);
+    }
+  }());
+}
+
+// 🎈 BALLOON EFFECT
+function launchBalloons() {
+  for (let i = 0; i < 15; i++) {
+    const balloon = document.createElement("div");
+    balloon.classList.add("balloon");
+    balloon.style.left = Math.random() * 100 + "vw";
+    balloon.style.background = `hsl(${Math.random() * 360}, 80%, 70%)`;
+    document.body.appendChild(balloon);
+
+    // animasi naik
+    setTimeout(() => {
+      balloon.style.bottom = "110vh";
+      balloon.style.opacity = 0;
+    }, 100);
+
+    // hapus setelah selesai
+    setTimeout(() => balloon.remove(), 8000);
+  }
+}
+
+// 🎂 CAKE EFFECT
+function showCake() {
+  const cake = document.createElement("div");
+  cake.id = "cake";
+  cake.innerHTML = "🎂";
+  document.body.appendChild(cake);
+
+  setTimeout(() => cake.classList.add("active"), 10);
+  setTimeout(() => cake.classList.remove("active"), 5000);
+  setTimeout(() => cake.remove(), 6000);
+}
+
+// tombol event listeners
+document.getElementById("confetti-btn").addEventListener("click", launchConfetti);
+document.getElementById("balloon-btn").addEventListener("click", launchBalloons);
+document.getElementById("cake-btn").addEventListener("click", showCake);
+</script>
+
+<!-- 🎉 Confetti library -->
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+
+<!-- 🎈 Balloon & Cake Styles -->
+<style>
+.balloon {
+  position: fixed;
+  bottom: -10vh;
+  width: 40px;
+  height: 60px;
+  border-radius: 50%;
+  background: pink;
+  opacity: 0.9;
+  transition: all 8s linear;
+  z-index: 2000;
+}
+</style>
+
+</body>
+</html>

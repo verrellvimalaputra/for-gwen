@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>For My Gwennie 💖</title>
+<link rel="stylesheet" href="css/quiz.css">
+<script src="https://kit.fontawesome.com/a14ae32021.js" crossorigin="anonymous"></script>
+
+<style>
+/* 🌈 Fade-out effect saat pindah ke index.html */
+.fade-out {
+  opacity: 0;
+  transition: opacity 1s ease;
+}
+</style>
+
+</head>
+<body>
+
+<!-- 🎵 Background Music -->
+<audio id="quiz-music" loop>
+  <source src="quiz-music.mp3" type="audio/mpeg">
+</audio>
+
+<div class="quiz-container">
+  <h2 id="question-title">Pertanyaan 1:</h2>
+  <p id="question-text">Siapa orang paling ganteng di dunia? 😏</p>
+
+  <div id="options" class="options">
+    <button class="option">Ryan Gosling</button>
+    <button class="option">Mingyu beneran</button>
+    <button class="option correct">Verrell yang mirip Mingyu</button>
+    <button class="option">Verrell Bramasta</button>
+  </div>
+
+  <p id="result"></p>
+  <button id="next-btn" style="display:none;">➡️ Next Question</button>
+  <a id="next-link" href="index.html" style="display:none;">💌 Selamat anda lulus!</a>
+</div>
+
+<script>
+const music = document.getElementById('quiz-music');
+music.volume = 0.3;
+
+// 🎵 Autoplay musik (tapi boleh dimulai setelah interaksi user)
+window.addEventListener('load', () => {
+  const playPromise = music.play();
+  if (playPromise !== undefined) {
+    playPromise.catch(() => console.log("Autoplay diblokir, akan mulai setelah klik pertama"));
+  }
+});
+document.body.addEventListener('click', () => {
+  if (music.paused) music.play();
+}, { once: true });
+
+// 💖 Daftar pertanyaan
+const questions = [
+  {
+    title: "Pertanyaan 1:",
+    text: "Siapa orang paling ganteng di dunia? 😏",
+    options: ["Ryan Gosling", "Mingyu beneran", "Verrell yang mirip Mingyu 😎", "Verrell Bramasta"],
+    correct: 2
+  },
+  {
+    title: "Pertanyaan 2:",
+    text: "Organel apa yang berfungsi sebagai pusat kendali sel?",
+    options: ["Mitokondria", "Nukleus (inti sel) 🧠", "Ribosom", "Lisosom"],
+    correct: 1
+  },
+  {
+    title: "Pertanyaan 3:",
+    text: "Tanggal berapa terjadi penembakan di Eberstadt yang menggemparkan seluruh Eropa?",
+    options: [
+      "satu hari setelah indonesia merdeka",
+      "286 hari setelah gwen sampe jerman",
+      "tiga hari setelah dari rulantica",
+      "29 febuari 2024"
+    ],
+    correct: 2
+  },
+  {
+    title: "Pertanyaan 4:",
+    text: "Yang manakah yang paling besar di antara pilihan berikut?",
+    options: ["Gajah", "Paus", "Megalodon", "Cintaku Padamu"],
+    correct: 3
+  },
+  {
+    title: "Pertanyaan 5:",
+    text: "Dalam ekonomi internasional, apa istilah untuk kondisi ketika sebuah negara mengekspor lebih banyak dari yang diimpornya? 💼🌍",
+    options: [
+      "Defisit perdagangan",
+      "Inflasi",
+      "Surplus perdagangan",
+      "Krisis finansial global"
+    ],
+    correct: 2
+  },
+  {
+    title: "Pertanyaan 6:",
+    text: "Do you love me? 💞",
+    options: ["Yes 😍", "No 🙄"],
+    correct: 0,
+    special: true
+  }
+];
+
+let currentQuestion = 0;
+const questionTitle = document.getElementById('question-title');
+const questionText = document.getElementById('question-text');
+const optionsDiv = document.getElementById('options');
+const result = document.getElementById('result');
+const nextBtn = document.getElementById('next-btn');
+const nextLink = document.getElementById('next-link');
+
+function loadQuestion() {
+  const q = questions[currentQuestion];
+  questionTitle.textContent = q.title;
+  questionText.innerHTML = q.text;
+  optionsDiv.innerHTML = "";
+  result.textContent = "";
+  nextBtn.style.display = "none";
+
+  // pertanyaan spesial terakhir
+  if (q.special) {
+    const yesBtn = document.createElement('button');
+    yesBtn.classList.add('option');
+    yesBtn.textContent = "Yes 😍";
+    yesBtn.addEventListener('click', () => {
+      result.textContent = "Awww aku juga love you! 😭💕";
+      result.style.color = "hotpink";
+      yesBtn.style.background = "#ff69b4";
+      nextLink.style.display = "inline-block";
+    });
+
+    const noBtn = document.createElement('button');
+    noBtn.classList.add('option');
+    noBtn.textContent = "No 🙄";
+
+    // tombol “No” kabur dari cursor
+    noBtn.addEventListener('mouseover', () => {
+      const x = Math.random() * (window.innerWidth - 150);
+      const y = Math.random() * (window.innerHeight - 150);
+      noBtn.style.position = "fixed";
+      noBtn.style.left = `${x}px`;
+      noBtn.style.top = `${y}px`;
+    });
+
+    optionsDiv.appendChild(yesBtn);
+    optionsDiv.appendChild(noBtn);
+    return;
+  }
+
+  // pertanyaan biasa
+  q.options.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.classList.add('option');
+    btn.innerHTML = opt;
+    btn.addEventListener('click', () => handleAnswer(i === q.correct, btn));
+    optionsDiv.appendChild(btn);
+  });
+}
+
+function handleAnswer(correct, btn) {
+  const buttons = document.querySelectorAll('.option');
+  if (correct) {
+    result.textContent = "NAHH ETAAAA 😍";
+    result.style.color = "hotpink";
+    btn.style.background = "#ff69b4";
+    buttons.forEach(b => b.disabled = true);
+
+    if (currentQuestion < questions.length - 1) {
+      nextBtn.style.display = "inline-block";
+    } else {
+      nextLink.style.display = "inline-block";
+    }
+  } else {
+    if (currentQuestion === 0) {
+      if (!window._wrongMessages) {
+        window._wrongMessages = [
+          "SALAHHHH",
+          "SALAHH WOY SALAHH",
+          "ADUHH MASIH KALAH GANTENG ITUMAH SAMA SI VERRELL",
+          "Hint: Verrell paling ganteng"
+        ];
+        window._wrongIndex = 0;
+      }
+      result.textContent = window._wrongMessages[window._wrongIndex];
+      window._wrongIndex = (window._wrongIndex + 1) % window._wrongMessages.length;
+    } else {
+      const generic = ["Maap tebakannya kurang tepat", "KURENGGGG", "PILIH YANG LAEN ANJAY"];
+      result.textContent = generic[Math.floor(Math.random() * generic.length)];
+    }
+    result.style.color = "gray";
+    btn.style.background = "#bbb";
+    setTimeout(() => btn.style.background = "", 400);
+  }
+}
+
+nextBtn.addEventListener('click', () => {
+  currentQuestion++;
+  loadQuestion();
+});
+
+// 💌 Tambah fade-out transisi ke index.html
+nextLink.addEventListener('click', (e) => {
+  e.preventDefault();
+  document.body.classList.add('fade-out');
+  setTimeout(() => {
+    window.location.href = nextLink.getAttribute('href');
+  }, 1000); // 1 detik fade sebelum pindah
+});
+
+loadQuestion();
+</script>
+
+</body>
+</html>
